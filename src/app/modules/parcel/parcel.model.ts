@@ -4,25 +4,20 @@ import { generateTrackingId } from "../../utils/generateTrackingId";
 import { AppError } from "../../errorHelpers/AppError";
 import httpStatus from "http-status-codes";
 
-const statusLogSchema = new Schema<IStatusLog>(
-  {
-    status: {
-      type: String,
-      enum: EStatus,
-      required: true,
-    },
-    updatedBy: { type: Schema.Types.ObjectId, ref: "User" },
-    note: { type: String },
+const statusLogSchema = new Schema<IStatusLog>({
+  status: {
+    type: String,
+    enum: EStatus,
+    default: EStatus.REQUESTED,
   },
-  {
-    versionKey: false,
-    timestamps: true,
-  }
-);
+  updatedBy: { type: Schema.Types.ObjectId, ref: "User" },
+  note: { type: String },
+  createdAt: { type: Date },
+});
 
 const parcelSchema = new Schema<IParcel>(
   {
-    trackingId: { type: String, unique: true, required: true },
+    trackingId: { type: String, unique: true },
     sender: { type: Schema.Types.ObjectId, ref: "User", required: true },
     receiver: {
       name: { type: String, required: true },
@@ -55,34 +50,46 @@ const parcelSchema = new Schema<IParcel>(
 );
 
 parcelSchema.pre<IParcel>("save", async function (next) {
-  if (!this.trackingId) {
-    let isUnique = false;
-    let attempts = 0;
-    const maxAttempts = 5;
+  if (this.isNew) {
+    // Only for new documents
+    // Generate tracking ID
+    if (!this.trackingId) {
+      let isUnique = false;
 
-    while (!isUnique && attempts < maxAttempts) {
-      attempts++;
-      this.trackingId = generateTrackingId();
-      try {
-        // Use the Parcel model directly
-        const exists = await Parcel.findOne({
-          trackingId: this.trackingId,
-        });
-        if (!exists) {
-          isUnique = true;
+      while (!isUnique) {
+        this.trackingId = generateTrackingId();
+        try {
+          const exists = await Parcel.findOne({
+            trackingId: this.trackingId,
+          });
+          if (!exists) {
+            isUnique = true;
+          }
+        } catch (err) {
+          return next(err as Error);
         }
-      } catch (err) {
-        return next(err as Error);
+      }
+
+      if (!isUnique) {
+        return next(
+          new AppError(
+            httpStatus.NOT_ACCEPTABLE,
+            "Failed to generate unique tracking ID"
+          )
+        );
       }
     }
 
-    if (!isUnique) {
-      return next(
-        new AppError(
-          httpStatus.NOT_ACCEPTABLE,
-          "Failed to generate unique tracking ID"
-        )
-      );
+    // Add initial status log entry
+    if (!this.statusLog || this.statusLog.length === 0) {
+      this.statusLog = [
+        {
+          updatedBy: this.sender,
+          status: EStatus.REQUESTED,
+          note: "Parcel created",
+          createdAt: new Date(),
+        },
+      ];
     }
   }
   next();

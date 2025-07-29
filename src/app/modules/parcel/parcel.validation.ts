@@ -1,13 +1,14 @@
 import { z } from "zod";
 import { EPackageType, EStatus } from "./parcel.interface";
+import mongoose from "mongoose";
 
-// Helper for ObjectId validation
+// Custom validator for MongoDB ObjectId
 const objectIdSchema = z.string().refine(
-  (val) => {
-    return /^[0-9a-fA-F]{24}$/.test(val);
+  (value) => {
+    return mongoose.Types.ObjectId.isValid(value);
   },
   {
-    message: "Must be a valid ObjectId",
+    message: "Invalid MongoDB ObjectId",
   }
 );
 
@@ -22,12 +23,6 @@ const statusLogSchema = z.object({
 
 // Base Parcel Schema
 const baseParcelSchema = z.object({
-  trackingId: z
-    .string()
-    .min(1, "Tracking ID is required")
-    .regex(/^TRK-[A-Z0-9]{6}-[A-Z0-9]{6}$/, {
-      message: "Invalid tracking ID format. Expected format: TRK-XXXXXX-XXXXXX",
-    }),
   sender: objectIdSchema,
   receiver: z.object({
     name: z
