@@ -72,7 +72,6 @@ const updateUser = async (
 
   if (payload.role) {
     if (
-      decodedToken.role === Role.USER ||
       decodedToken.role === Role.SENDER ||
       decodedToken.role === Role.RECIVER
     ) {
@@ -86,7 +85,6 @@ const updateUser = async (
 
   if (payload.isActive || payload.isDeleted || payload.isVerified) {
     if (
-      decodedToken.role === Role.USER ||
       decodedToken.role === Role.SENDER ||
       decodedToken.role === Role.RECIVER
     ) {
