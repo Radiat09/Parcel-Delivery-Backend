@@ -49,13 +49,18 @@ const getAllParcelService = async (
     };
   } else {
     const userExist = await User.findOne({ email: user.email });
+    let data;
 
     if (!userExist) {
       throw new AppError(httpStatus.NOT_FOUND, "Invalid User request!");
     }
+    if (user.role === Role.SENDER) {
+      // Now `userExist` is a single document (or null)
+      data = await Parcel.find({ sender: userExist._id });
+    } else {
+      data = await Parcel.find({ "receiver.email": userExist.email });
+    }
 
-    // Now `userExist` is a single document (or null)
-    const data = await Parcel.find({ sender: userExist._id });
     return { data, meta: { total: data?.length } }; // Maintain consistent return type
   }
 };

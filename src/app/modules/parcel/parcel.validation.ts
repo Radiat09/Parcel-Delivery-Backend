@@ -37,6 +37,11 @@ const baseParcelSchema = z.object({
       .string()
       .min(5, "Address must be at least 5 characters")
       .max(200, "Address cannot exceed 200 characters"),
+    email: z
+      .string({ invalid_type_error: "Email must be string" })
+      .email({ message: "Invalid email address format." })
+      .min(5, { message: "Email must be at least 5 characters long." })
+      .max(100, { message: "Email cannot exceed 100 characters." }),
   }),
   packageDetails: z.object({
     type: z.nativeEnum(EPackageType),

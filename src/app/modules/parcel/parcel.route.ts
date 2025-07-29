@@ -13,7 +13,7 @@ router.post(
 
 router.get(
   "/",
-  checkAuth(Role.SENDER, Role.ADMIN, Role.SUPER_ADMIN),
+  checkAuth(...Object.values(Role)),
   ParcelControllers.getAllParcel
 );
 
