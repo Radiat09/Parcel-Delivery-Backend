@@ -1,9 +1,8 @@
-import { Types } from "mongoose";
+import mongoose, { Types } from "mongoose";
 
 export enum Role {
   SUPER_ADMIN = "SUPER_ADMIN",
   ADMIN = "ADMIN",
-  USER = "USER",
   SENDER = "SENDER",
   RECIVER = "RECIVER",
 }
@@ -32,4 +31,5 @@ export interface IUser {
   isVerified?: boolean;
   role: Role;
   auths: IAuthProvider[];
+  deliveryHistory?: mongoose.Types.ObjectId[];
 }

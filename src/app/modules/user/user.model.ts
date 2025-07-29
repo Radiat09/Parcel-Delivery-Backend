@@ -64,7 +64,16 @@ const userSchema = new Schema<IUser>(
   {
     versionKey: false,
     timestamps: true,
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true },
   }
 );
+
+// Virtual for received parcels
+userSchema.virtual("receivedParcels", {
+  ref: "Parcel",
+  localField: "_id",
+  foreignField: "receiver.userId", // Assuming receiver has userId
+});
 
 export const User = model<IUser>("User", userSchema);
