@@ -20,6 +20,7 @@ export interface IStatusLog {
   status: EStatus;
   updatedBy: Types.ObjectId; // User ID
   note?: string;
+  createdAt: Date;
 }
 
 export interface IPackageDetails {
@@ -32,6 +33,7 @@ export interface IReceiverInfo {
   name: string;
   phone: string;
   address: string;
+  email: string;
 }
 
 export interface IParcel {
@@ -46,4 +48,5 @@ export interface IParcel {
   isBlocked: boolean;
   expectedDeliveryDate?: Date;
   actualDeliveryDate?: Date;
+  isNew?: boolean;
 }
