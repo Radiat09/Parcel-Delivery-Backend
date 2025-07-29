@@ -66,10 +66,8 @@ const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const QueryBuilder_1 = require("../../utils/QueryBuilder");
 const user_constants_1 = require("./user.constants");
 
-const createUserService = (payload) =>
-  __awaiter(void 0, void 0, void 0, function* () {
-    const { email, password } = payload,
-      rest = __rest(payload, ["email", "password"]);
+const createUserService = (payload) => __awaiter(void 0, void 0, void 0, function* () {
+    const { email, password } = payload, rest = __rest(payload, ["email", "password"]);
     console.log(payload);
     const isUserExist = yield user_model_1.User.findOne({ email });
     if (isUserExist) {
@@ -125,37 +123,20 @@ const updateUser = (userId, payload, decodedToken) =>
       );
     }
     if (payload.role) {
-      if (
-        decodedToken.role === user_interface_1.Role.USER ||
-        decodedToken.role === user_interface_1.Role.SENDER ||
-        decodedToken.role === user_interface_1.Role.RECIVER
-      ) {
-        throw new AppError_1.AppError(
-          http_status_codes_1.default.FORBIDDEN,
-          "You are not authorized"
-        );
-      }
-      if (
-        payload.role === user_interface_1.Role.SUPER_ADMIN &&
-        decodedToken.role === user_interface_1.Role.ADMIN
-      ) {
-        throw new AppError_1.AppError(
-          http_status_codes_1.default.FORBIDDEN,
-          "You are not authorized"
-        );
-      }
+        if (decodedToken.role === user_interface_1.Role.SENDER ||
+            decodedToken.role === user_interface_1.Role.RECIVER) {
+            throw new AppError_1.AppError(http_status_codes_1.default.FORBIDDEN, "You are not authorized");
+        }
+        if (payload.role === user_interface_1.Role.SUPER_ADMIN && decodedToken.role === user_interface_1.Role.ADMIN) {
+            throw new AppError_1.AppError(http_status_codes_1.default.FORBIDDEN, "You are not authorized");
+        }
     }
     if (payload.isActive || payload.isDeleted || payload.isVerified) {
-      if (
-        decodedToken.role === user_interface_1.Role.USER ||
-        decodedToken.role === user_interface_1.Role.SENDER ||
-        decodedToken.role === user_interface_1.Role.RECIVER
-      ) {
-        throw new AppError_1.AppError(
-          http_status_codes_1.default.FORBIDDEN,
-          "You are not authorized"
-        );
-      }
+        if (decodedToken.role === user_interface_1.Role.SENDER ||
+            decodedToken.role === user_interface_1.Role.RECIVER) {
+            throw new AppError_1.AppError(http_status_codes_1.default.FORBIDDEN, "You are not authorized");
+        }
+
     }
     if (payload.password) {
       payload.password = yield bcryptjs_1.default.hash(

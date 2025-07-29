@@ -68,12 +68,12 @@ const userSchema = new mongoose_1.Schema(
     timestamps: true,
     toJSON: { virtuals: true },
     toObject: { virtuals: true },
-  }
-);
+});
 // Virtual for received parcels
 userSchema.virtual("receivedParcels", {
-  ref: "Parcel",
-  localField: "_id",
-  foreignField: "receiver.userId", // Assuming receiver has userId
+    ref: "Parcel",
+    localField: "_id",
+    foreignField: "receiver.userId", // Assuming receiver has userId
+
 });
 exports.User = (0, mongoose_1.model)("User", userSchema);

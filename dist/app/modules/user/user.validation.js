@@ -38,15 +38,17 @@ exports.createUserZodSchema = zod_1.default.object({
       message:
         "Phone number must be valid for Bangladesh. Format: +8801XXXXXXXXX or 01XXXXXXXXX",
     })
-    .optional(),
-  address: zod_1.default
-    .string({ invalid_type_error: "Address must be string" })
-    .max(200, { message: "Address cannot exceed 200 characters." })
-    .optional(),
-  role: zod_1.default
-    // .enum(["ADMIN", "SENDER","RECIVER", "USER", "SUPER_ADMIN"])
-    .enum(Object.values(user_interface_1.Role))
-    .optional(),
+
+        .optional(),
+    address: zod_1.default
+        .string({ invalid_type_error: "Address must be string" })
+        .max(200, { message: "Address cannot exceed 200 characters." })
+        .optional(),
+    role: zod_1.default
+        // .enum(["ADMIN", "SENDER","RECIVER", "USER", "SUPER_ADMIN"])
+        .enum(Object.values(user_interface_1.Role))
+        .optional(),
+
 });
 exports.updateUserZodSchema = zod_1.default.object({
   name: zod_1.default
@@ -73,26 +75,22 @@ exports.updateUserZodSchema = zod_1.default.object({
       message:
         "Phone number must be valid for Bangladesh. Format: +8801XXXXXXXXX or 01XXXXXXXXX",
     })
-    .optional(),
-  role: zod_1.default
-    // .enum(["ADMIN", "GUIDE", "USER", "SUPER_ADMIN"])
-    .enum(Object.values(user_interface_1.Role))
-    .optional(),
-  isActive: zod_1.default
-    .enum(Object.values(user_interface_1.IsActive))
-    .optional(),
-  isDeleted: zod_1.default
-    .boolean({ invalid_type_error: "isDeleted must be true or false" })
-    .optional(),
-  isVerified: zod_1.default
-    .boolean({ invalid_type_error: "isVerified must be true or false" })
-    .optional(),
-  address: zod_1.default
-    .string({ invalid_type_error: "Address must be string" })
-    .max(200, { message: "Address cannot exceed 200 characters." })
-    .optional(),
-  deliveryHistory: zod_1.default
-    .array(zod_1.default.instanceof(mongoose_1.default.Types.ObjectId))
-    .optional(),
+        .optional(),
+    role: zod_1.default
+        // .enum(["ADMIN", "GUIDE", "USER", "SUPER_ADMIN"])
+        .enum(Object.values(user_interface_1.Role))
+        .optional(),
+    isActive: zod_1.default.enum(Object.values(user_interface_1.IsActive)).optional(),
+    isDeleted: zod_1.default
+        .boolean({ invalid_type_error: "isDeleted must be true or false" })
+        .optional(),
+    isVerified: zod_1.default
+        .boolean({ invalid_type_error: "isVerified must be true or false" })
+        .optional(),
+    address: zod_1.default
+        .string({ invalid_type_error: "Address must be string" })
+        .max(200, { message: "Address cannot exceed 200 characters." })
+        .optional(),
+    deliveryHistory: zod_1.default.array(zod_1.default.instanceof(mongoose_1.default.Types.ObjectId)).optional(),
 
 });
