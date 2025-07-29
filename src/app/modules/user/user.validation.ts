@@ -1,5 +1,6 @@
 import z from "zod";
 import { IsActive, Role } from "./user.interface";
+import mongoose from "mongoose";
 
 export const createUserZodSchema = z.object({
   name: z
@@ -81,4 +82,5 @@ export const updateUserZodSchema = z.object({
     .string({ invalid_type_error: "Address must be string" })
     .max(200, { message: "Address cannot exceed 200 characters." })
     .optional(),
+  deliveryHistory: z.array(z.instanceof(mongoose.Types.ObjectId)).optional(),
 });

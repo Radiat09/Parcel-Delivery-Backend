@@ -3,6 +3,7 @@ import { EPackageType, EStatus, IParcel, IStatusLog } from "./parcel.interface";
 import { generateTrackingId } from "../../utils/generateTrackingId";
 import { AppError } from "../../errorHelpers/AppError";
 import httpStatus from "http-status-codes";
+import { User } from "../user/user.model";
 
 const statusLogSchema = new Schema<IStatusLog>({
   status: {
@@ -23,6 +24,7 @@ const parcelSchema = new Schema<IParcel>(
       name: { type: String, required: true },
       phone: { type: String, required: true },
       address: { type: String, required: true },
+      email: { type: String, required: true },
     },
     packageDetails: {
       type: {
@@ -93,6 +95,16 @@ parcelSchema.pre<IParcel>("save", async function (next) {
     }
   }
   next();
+});
+
+// In Parcel model's post-save hook
+parcelSchema.post("save", async function (doc) {
+  // If receiver is a registered user (has userId)
+  if (doc.currentStatus === EStatus.DELIVERED) {
+    await User.findByIdAndUpdate(doc.receiver.email, {
+      $addToSet: { deliveryHistory: doc._id },
+    });
+  }
 });
 
 export const Parcel = model<IParcel>("Parcel", parcelSchema);
