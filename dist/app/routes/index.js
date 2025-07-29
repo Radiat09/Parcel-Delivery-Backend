@@ -22,6 +22,7 @@ const moduleRoutes = [
 ];
 moduleRoutes.forEach((route) => {
   exports.router.use(route.path, route.route);
+
 });
 // router.use("/user", UserRoutes)
 // router.use("/tour", TourRoutes)
