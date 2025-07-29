@@ -11,4 +11,10 @@ router.post(
   ParcelControllers.createParcel
 );
 
+router.get(
+  "/",
+  checkAuth(Role.SENDER, Role.ADMIN, Role.SUPER_ADMIN),
+  ParcelControllers.getAllParcel
+);
+
 export const ParcelRoutes = router;
