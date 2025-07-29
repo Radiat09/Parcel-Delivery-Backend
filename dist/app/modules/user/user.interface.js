@@ -5,7 +5,6 @@ var Role;
 (function (Role) {
     Role["SUPER_ADMIN"] = "SUPER_ADMIN";
     Role["ADMIN"] = "ADMIN";
-    Role["USER"] = "USER";
     Role["SENDER"] = "SENDER";
     Role["RECIVER"] = "RECIVER";
 })(Role || (exports.Role = Role = {}));

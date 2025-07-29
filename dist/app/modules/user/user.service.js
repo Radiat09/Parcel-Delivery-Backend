@@ -34,6 +34,7 @@ const QueryBuilder_1 = require("../../utils/QueryBuilder");
 const user_constants_1 = require("./user.constants");
 const createUserService = (payload) => __awaiter(void 0, void 0, void 0, function* () {
     const { email, password } = payload, rest = __rest(payload, ["email", "password"]);
+    console.log(payload);
     const isUserExist = yield user_model_1.User.findOne({ email });
     if (isUserExist) {
         throw new AppError_1.AppError(http_status_codes_1.default.BAD_REQUEST, "User Already Exist");

@@ -6,6 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.updateUserZodSchema = exports.createUserZodSchema = void 0;
 const zod_1 = __importDefault(require("zod"));
 const user_interface_1 = require("./user.interface");
+const mongoose_1 = __importDefault(require("mongoose"));
 exports.createUserZodSchema = zod_1.default.object({
     name: zod_1.default
         .string({ invalid_type_error: "Name must be string" })
@@ -37,6 +38,10 @@ exports.createUserZodSchema = zod_1.default.object({
     address: zod_1.default
         .string({ invalid_type_error: "Address must be string" })
         .max(200, { message: "Address cannot exceed 200 characters." })
+        .optional(),
+    role: zod_1.default
+        // .enum(["ADMIN", "SENDER","RECIVER", "USER", "SUPER_ADMIN"])
+        .enum(Object.values(user_interface_1.Role))
         .optional(),
 });
 exports.updateUserZodSchema = zod_1.default.object({
@@ -79,4 +84,5 @@ exports.updateUserZodSchema = zod_1.default.object({
         .string({ invalid_type_error: "Address must be string" })
         .max(200, { message: "Address cannot exceed 200 characters." })
         .optional(),
+    deliveryHistory: zod_1.default.array(zod_1.default.instanceof(mongoose_1.default.Types.ObjectId)).optional(),
 });
