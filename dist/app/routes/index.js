@@ -22,7 +22,6 @@ const moduleRoutes = [
 
 ];
 moduleRoutes.forEach((route) => {
-  exports.router.use(route.path, route.route);
-
+    exports.router.use(route.path, route.route);
 });
 

@@ -10,7 +10,7 @@ var Role;
 })(Role || (exports.Role = Role = {}));
 var IsActive;
 (function (IsActive) {
-  IsActive["ACTIVE"] = "ACTIVE";
-  IsActive["INACTIVE"] = "INACTIVE";
-  IsActive["BLOCKED"] = "BLOCKED";
+    IsActive["ACTIVE"] = "ACTIVE";
+    IsActive["INACTIVE"] = "INACTIVE";
+    IsActive["BLOCKED"] = "BLOCKED";
 })(IsActive || (exports.IsActive = IsActive = {}));
