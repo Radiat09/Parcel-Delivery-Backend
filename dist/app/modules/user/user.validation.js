@@ -34,6 +34,7 @@ exports.createUserZodSchema = zod_1.default.object({
         .regex(/^(?:\+8801\d{9}|01\d{9})$/, {
         message: "Phone number must be valid for Bangladesh. Format: +8801XXXXXXXXX or 01XXXXXXXXX",
     })
+
         .optional(),
     address: zod_1.default
         .string({ invalid_type_error: "Address must be string" })
@@ -43,6 +44,7 @@ exports.createUserZodSchema = zod_1.default.object({
         // .enum(["ADMIN", "SENDER","RECIVER", "USER", "SUPER_ADMIN"])
         .enum(Object.values(user_interface_1.Role))
         .optional(),
+
 });
 exports.updateUserZodSchema = zod_1.default.object({
     name: zod_1.default
@@ -85,4 +87,5 @@ exports.updateUserZodSchema = zod_1.default.object({
         .max(200, { message: "Address cannot exceed 200 characters." })
         .optional(),
     deliveryHistory: zod_1.default.array(zod_1.default.instanceof(mongoose_1.default.Types.ObjectId)).optional(),
+
 });
