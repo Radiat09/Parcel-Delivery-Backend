@@ -19,12 +19,10 @@ const moduleRoutes = [
         path: "/parcel",
         route: parcel_route_1.ParcelRoutes,
     },
+
 ];
 moduleRoutes.forEach((route) => {
-    exports.router.use(route.path, route.route);
+  exports.router.use(route.path, route.route);
+
 });
-// router.use("/user", UserRoutes)
-// router.use("/tour", TourRoutes)
-// router.use("/division", DivisionRoutes)
-// router.use("/booking", BookingRoutes)
-// router.use("/user", UserRoutes)
+
