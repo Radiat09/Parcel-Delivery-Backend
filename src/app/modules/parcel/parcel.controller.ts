@@ -34,7 +34,19 @@ const getAllParcel = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+const updateParcel = catchAsync(async (req: Request, res: Response) => {
+  const result = await ParcelServices.updateParcelService(req);
+
+  sendResponse(res, {
+    success: true,
+    statusCode: httpStatus.OK,
+    message: "Parcel updated succesfully!",
+    data: result.data,
+  });
+});
+
 export const ParcelControllers = {
   createParcel,
   getAllParcel,
+  updateParcel,
 };

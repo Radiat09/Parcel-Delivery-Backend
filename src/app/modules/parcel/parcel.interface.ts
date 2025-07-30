@@ -50,3 +50,9 @@ export interface IParcel {
   actualDeliveryDate?: Date;
   isNew?: boolean;
 }
+
+export interface IMongoUpdate {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  $set?: Record<string, any>;
+  $push?: { statusLog?: IStatusLog };
+}

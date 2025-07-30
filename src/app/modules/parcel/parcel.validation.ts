@@ -22,7 +22,7 @@ const statusLogSchema = z.object({
 });
 
 // Base Parcel Schema
-const baseParcelSchema = z.object({
+export const baseParcelSchema = z.object({
   sender: objectIdSchema,
   receiver: z.object({
     name: z
@@ -71,9 +71,11 @@ const baseParcelSchema = z.object({
 // Create Parcel Validation (for POST requests)
 export const createParcelZodSchema = baseParcelSchema
   .pick({
+    sender: true,
     receiver: true,
     packageDetails: true,
     expectedDeliveryDate: true,
+    fee: true,
   })
   .extend({
     expectedDeliveryDate: z
@@ -87,77 +89,59 @@ export const createParcelZodSchema = baseParcelSchema
   });
 
 // Update Parcel Validation (for PATCH requests)
-export const updateParcelZodSchema = z.object({
-  receiver: z
-    .object({
-      name: z
-        .string()
-        .min(2, "Receiver name must be at least 2 characters")
-        .max(50, "Receiver name cannot exceed 50 characters")
-        .optional(),
-      phone: z
-        .string()
-        .regex(/^(?:\+8801\d{9}|01\d{9})$/, {
-          message:
-            "Phone number must be valid for Bangladesh. Format: +8801XXXXXXXXX or 01XXXXXXXXX",
-        })
-        .optional(),
-      address: z
-        .string()
-        .min(5, "Address must be at least 5 characters")
-        .max(200, "Address cannot exceed 200 characters")
-        .optional(),
-    })
-    .optional(),
-  packageDetails: z
-    .object({
-      type: z.nativeEnum(EPackageType).optional(),
-      weight: z
-        .number()
-        .positive("Weight must be a positive number")
-        .max(100, "Weight cannot exceed 100kg")
-        .optional(),
-      description: z
-        .string()
-        .max(500, "Description cannot exceed 500 characters")
-        .optional(),
-    })
-    .optional(),
-  expectedDeliveryDate: z
-    .string()
-    .datetime()
-    .transform((val) => new Date(val))
-    .refine((date) => date > new Date(), {
-      message: "Expected delivery date must be in the future",
-    })
-    .optional(),
-  isBlocked: z.boolean().optional(),
-});
+export const updateParcelSchema = z
+  .object({
+    receiver: z
+      .object({
+        name: z
+          .string()
+          .min(2, "Receiver name must be at least 2 characters")
+          .max(50)
+          .optional(),
+        phone: z
+          .string()
+          .regex(/^(?:\+8801\d{9}|01\d{9})$/, {
+            message:
+              "Phone number must be valid for Bangladesh. Format: +8801XXXXXXXXX or 01XXXXXXXXX",
+          })
+          .optional(),
+        address: z
+          .string()
+          .min(5, "Address must be at least 5 characters")
+          .max(200)
+          .optional(),
+        email: z
+          .string()
+          .email("Invalid email address format")
+          .min(5, "Email must be at least 5 characters")
+          .max(100, "Email cannot exceed 100 characters")
+          .optional(),
+      })
+      .strict()
+      .partial()
+      .optional(),
 
-// Status Update Validation
-export const updateParcelStatusZodSchema = z.object({
-  status: z.nativeEnum(EStatus),
-  note: z.string().max(500, "Note cannot exceed 500 characters").optional(),
-});
+    packageDetails: z
+      .object({
+        type: z.nativeEnum(EPackageType).optional(),
+        weight: z
+          .number()
+          .positive("Weight must be positive")
+          .max(100, "Max weight is 100kg")
+          .optional(),
+        description: z.string().max(500, "Description too long").optional(),
+      })
+      .strict()
+      .optional(),
 
-// Tracking ID Param Validation
-export const trackingIdParamSchema = z.object({
-  trackingId: z.string().regex(/^TRK-[A-Z0-9]{6}-[A-Z0-9]{6}$/, {
-    message: "Invalid tracking ID format. Expected format: TRK-XXXXXX-XXXXXX",
-  }),
-});
-
-// Parcel ID Param Validation
-export const parcelIdParamSchema = z.object({
-  id: objectIdSchema,
-});
-
-// Query Params for filtering parcels
-export const parcelQuerySchema = z.object({
-  status: z.nativeEnum(EStatus).optional(),
-  isBlocked: z.boolean().optional(),
-  sortBy: z.enum(["createdAt", "expectedDeliveryDate", "fee"]).optional(),
-  sortOrder: z.enum(["asc", "desc"]).optional(),
-  limit: z.number().int().positive().max(100).optional(),
-  page: z.number().int().positive().optional(),
-});
+    fee: z.number().positive("Fee must be positive").optional(),
+    currentStatus: z.nativeEnum(EStatus).optional(),
+    note: z.string().max(500, "Note too long").optional(),
+    expectedDeliveryDate: z.string().datetime("Invalid date format").optional(),
+    actualDeliveryDate: z.string().datetime("Invalid date format").optional(),
+    isBlocked: z.boolean().optional(),
+  })
+  .strict()
+  .refine((data) => Object.keys(data).length > 0, {
+    message: "At least one field must be provided for update",
+  });

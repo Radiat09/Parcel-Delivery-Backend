@@ -10,7 +10,6 @@ import { userSearchableFields } from "./user.constants";
 
 const createUserService = async (payload: Partial<IUser>) => {
   const { email, password, ...rest } = payload;
-  console.log(payload);
 
   const isUserExist = await User.findOne({ email });
 

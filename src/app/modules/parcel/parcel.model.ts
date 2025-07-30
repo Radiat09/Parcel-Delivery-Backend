@@ -16,7 +16,8 @@ const statusLogSchema = new Schema<IStatusLog>({
   createdAt: { type: Date },
 });
 
-const parcelSchema = new Schema<IParcel>({
+const parcelSchema = new Schema<IParcel>(
+  {
     trackingId: { type: String, unique: true },
     sender: { type: Schema.Types.ObjectId, ref: "User", required: true },
     receiver: {
