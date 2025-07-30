@@ -86,6 +86,7 @@ Follow these steps to set up the project:
 Register a new user
 
 **Request Body:**
+
 ```json
 {
   "name": "string",
@@ -95,6 +96,7 @@ Register a new user
   "address": "string"
 }
 ```
+
 Response:
 
 ```json
@@ -112,7 +114,9 @@ Response:
   }
 }
 ```
+
 Flow:
+
 1. Validate required fields
 2. Check email uniqueness
 3. Hash password
@@ -120,22 +124,23 @@ Flow:
 5. Generate tokens
 6. Return user data (excluding password)
 
-
-
 ### GET /user/all-users
+
 Get all users (Admin only)
 
 Headers:
 Authorization: Bearer <token>
 
 Query Params:
-* role - Filter by role
-* sort - Sorting (-createdAt for newest first)
-* page - Pagination page
-* limit - Items per page
-* search - name, email, address, role
+
+- role - Filter by role
+- sort - Sorting (-createdAt for newest first)
+- page - Pagination page
+- limit - Items per page
+- search - name, email, address, role
 
 Response:
+
 ```json
 {
   "success": true,
@@ -150,9 +155,11 @@ Response:
 ```
 
 ### GET /user/:id
+
 Update user
 
 **Request Body:**
+
 ```json
 {
   "name": "string",
@@ -162,7 +169,9 @@ Update user
   "address": "string"
 }
 ```
+
 Response:
+
 ```json
 {
   "success": true,
@@ -173,21 +182,26 @@ Response:
       "name": "string",
       "email": "string",
       "role": "string"
-    },
+    }
   }
 }
 ```
+
 ### POST /auth/login
- User login
+
+User login
 
 **Request Body:**
+
 ```json
 {
-    "email":"email@example.com",
-    "password":"A2b4@678"
+  "email": "email@example.com",
+  "password": "A2b4@678"
 }
 ```
+
 Response:
+
 ```json
 {
  "statusCode": 200,
@@ -217,17 +231,22 @@ Response:
     }
 }
 ```
+
 ### POST /auth/refresh-token
- Refresh token if token expired
+
+Refresh token if token expired
 
 **Request Body:**
+
 ```json
 {
-    "email":"email@example.com",
-    "password":"A2b4@678"
+  "email": "email@example.com",
+  "password": "A2b4@678"
 }
 ```
+
 Response:
+
 ```json
 {
  "statusCode": 200,
@@ -239,39 +258,50 @@ Response:
     }
 }
 ```
+
 ### POST /auth/logout
- Refresh token if token expired
+
+Refresh token if token expired
 
 Response:
+
 ```json
 {
- "statusCode": 200,
-    "success": true,
-    "message": "Logged out Successfully",
-    "data":null
+  "statusCode": 200,
+  "success": true,
+  "message": "Logged out Successfully",
+  "data": null
 }
 ```
+
 ### POST /auth/reset-password
- Reset or change password
+
+Reset or change password
 **Request Body:**
+
 ```json
 {
-    "oldPassword":"1223121AS12",
-    "newPassword":"341131SQ@"
+  "oldPassword": "1223121AS12",
+  "newPassword": "341131SQ@"
 }
 ```
+
 Response:
+
 ```json
 {
- "statusCode": 200,
-    "success": true,
-    "message": "Logged out Successfully",
-    "data":null
+  "statusCode": 200,
+  "success": true,
+  "message": "Logged out Successfully",
+  "data": null
 }
 ```
+
 ### POST /parcel/create
- Create a parcel to deliver
+
+Create a parcel to deliver
 **Request Body:**
+
 ```json
     "sender": "6888ffa7d90d56f502191681",
     "receiver": {
@@ -289,83 +319,95 @@ Response:
     "expectedDeliveryDate": "2026-09-15T00:00:00.000Z"
 }
 ```
+
 Response:
+
 ```json
 {
-    "statusCode": 201,
-    "success": true,
-    "message": "Parcel created succesfully!",
-    "data": {
-        "sender": "6888ffa7d90d56f502191681",
-        "receiver": {
-            "name": "John Doe",
-            "phone": "017********",
-            "address": "Mohaammadpur, BD",
-            "email": "example@gmail.com"
-        },
-        "packageDetails": {
-            "type": "DOCUMENT",
-            "weight": 0.2,
-            "description": "Mariti2al contracts"
-        },
-        "fee": 12.99,
-        "currentStatus": "REQUESTED",
-        "isBlocked": false,
-        "expectedDeliveryDate": "2026-09-15T00:00:00.000Z",
-        "_id": "688a64dda4496d1fbbaa4a6f",
-        "statusLog": [
-            {
-                "status": "REQUESTED",
-                "updatedBy": "6888ffa7d90d56f502191681",
-                "note": "Parcel created",
-                "createdAt": "2025-07-30T18:30:53.113Z",
-                "_id": "688a64dda4496d1fbbaa4a71"
-            }
-        ],
-        "createdAt": "2025-07-30T18:30:53.057Z",
-        "updatedAt": "2025-07-30T18:30:53.057Z",
-        "trackingId": "TRK-20250730-CNFB6U",
-        "__v": 0
-    }
-}
-```
-### GET /parcel
- Get all parcel for admins and others, based on user role dirrefent data will be returned
-Query Params:
-* filter - Filter by any parcel field (packageDetails.type=FRAGILE)
-* sort - Sorting (-createdAt for newest first)
-* page - Pagination page
-* limit - Items per page
-* searchTerm - name, email, address, role
-Response:
-```json
-{
-    "statusCode": 201,
-    "success": true,
-    "message": "Parcel created succesfully!",
-    "data": [{}]
-}
-```
-### PATCH /parcel/:trkId
- Update parcel details by admins and others, based on user role dirrefent data will be affect
-**Request Body:**
-```json
- {
-   "packageDetails":{
-        "type":"FRAGILE"
+  "statusCode": 201,
+  "success": true,
+  "message": "Parcel created succesfully!",
+  "data": {
+    "sender": "6888ffa7d90d56f502191681",
+    "receiver": {
+      "name": "John Doe",
+      "phone": "017********",
+      "address": "Mohaammadpur, BD",
+      "email": "example@gmail.com"
     },
-   "fee":20
+    "packageDetails": {
+      "type": "DOCUMENT",
+      "weight": 0.2,
+      "description": "Mariti2al contracts"
+    },
+    "fee": 12.99,
+    "currentStatus": "REQUESTED",
+    "isBlocked": false,
+    "expectedDeliveryDate": "2026-09-15T00:00:00.000Z",
+    "_id": "688a64dda4496d1fbbaa4a6f",
+    "statusLog": [
+      {
+        "status": "REQUESTED",
+        "updatedBy": "6888ffa7d90d56f502191681",
+        "note": "Parcel created",
+        "createdAt": "2025-07-30T18:30:53.113Z",
+        "_id": "688a64dda4496d1fbbaa4a71"
+      }
+    ],
+    "createdAt": "2025-07-30T18:30:53.057Z",
+    "updatedAt": "2025-07-30T18:30:53.057Z",
+    "trackingId": "TRK-20250730-CNFB6U",
+    "__v": 0
+  }
 }
 ```
-Response:
+
+### GET /parcel
+
+Get all parcel for admins and others, based on user role dirrefent data will be returned
+Query Params:
+
+- filter - Filter by any parcel field (packageDetails.type=FRAGILE)
+- sort - Sorting (-createdAt for newest first)
+- page - Pagination page
+- limit - Items per page
+- searchTerm - name, email, address, role
+  Response:
+
 ```json
 {
-    "statusCode": 201,
-    "success": true,
-    "message": "Parcel created succesfully!",
-    "data": [{}]
+  "statusCode": 201,
+  "success": true,
+  "message": "Parcel created succesfully!",
+  "data": [{}]
 }
 ```
+
+### PATCH /parcel/:trkId
+
+Update parcel details by admins and others, based on user role dirrefent data will be affect
+**Request Body:**
+
+```json
+{
+  "packageDetails": {
+    "type": "FRAGILE"
+  },
+  "fee": 20
+}
+```
+
+Response:
+
+```json
+{
+  "statusCode": 201,
+  "success": true,
+  "message": "Parcel created succesfully!",
+  "data": [{}]
+}
+```
+
 ## Configuration Options
 
 The application's behavior can be configured through environment variables. Here's a summary of key configuration options:
