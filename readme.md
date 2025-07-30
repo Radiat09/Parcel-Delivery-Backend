@@ -82,7 +82,7 @@ Follow these steps to set up the project:
 
 ## Usage Examples & API Documentation
 
-​### `POST /user/register`
+​### POST /user/register
 Register a new user
 
 **Request Body:**
@@ -122,7 +122,7 @@ Flow:
 
 
 
-GET /user/all-users
+### GET /user/all-users
 Get all users (Admin only)
 
 Headers:
@@ -133,6 +133,19 @@ Query Params:
 * sort - Sorting (-createdAt for newest first)
 * page - Pagination page
 * limit - Items per page
+
+Response:
+```json
+{
+  "success": true,
+  "data": [User],
+  "meta": {
+    "page": 1,
+    "limit": 10,
+    "total": 100
+  }
+}
+```
 
 ## Configuration Options
 
