@@ -82,17 +82,57 @@ Follow these steps to set up the project:
 
 ## Usage Examples & API Documentation
 
-The application exposes a RESTful API. While detailed API documentation is not included in the provided files, you can infer some endpoints based on the `src/app/routes` directory.
+​### `POST /user/register`
+Register a new user
 
-**Example (Hypothetical) - Get All Parcels:**
+**Request Body:**
+```json
+{
+  "name": "string",
+  "email": "string",
+  "password": "string",
+  "phone": "string",
+  "address": "string"
+}
+```
+Response:
 
-`GET /parcels` - Retrieves a list of all parcels.
+```json
+{
+  "success": true,
+  "data": {
+    "user": {
+      "_id": "string",
+      "name": "string",
+      "email": "string",
+      "role": "string"
+    },
+    "accessToken": "string",
+    "refreshToken": "string"
+  }
+}
+```
+Flow:
+1. Validate required fields
+2. Check email uniqueness
+3. Hash password
+4. Create user in database
+5. Generate tokens
+6. Return user data (excluding password)
 
-**Example (Hypothetical) - Create a New Parcel:**
 
-`POST /parcels` - Creates a new parcel. Request body should be in JSON format with parcel details.
 
-**Note:** You will need to inspect the routing configuration in `src/app/routes` to determine the exact API endpoints and request/response formats. Consider using tools like Swagger/OpenAPI to document the API.
+GET /user/all-users
+Get all users (Admin only)
+
+Headers:
+Authorization: Bearer <token>
+
+Query Params:
+* role - Filter by role
+* sort - Sorting (-createdAt for newest first)
+* page - Pagination page
+* limit - Items per page
 
 ## Configuration Options
 
