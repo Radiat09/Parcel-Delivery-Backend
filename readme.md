@@ -133,11 +133,13 @@ Query Params:
 * sort - Sorting (-createdAt for newest first)
 * page - Pagination page
 * limit - Items per page
+* search - name, email, address, role
 
 Response:
 ```json
 {
   "success": true,
+ "message": "User registered succesfully!"
   "data": [User],
   "meta": {
     "page": 1,
@@ -147,6 +149,223 @@ Response:
 }
 ```
 
+### GET /user/:id
+Update user
+
+**Request Body:**
+```json
+{
+  "name": "string",
+  "email": "string",
+  "password": "string",
+  "phone": "string",
+  "address": "string"
+}
+```
+Response:
+```json
+{
+  "success": true,
+  "message": "User updated succesfully!",
+  "data": {
+    "user": {
+      "_id": "string",
+      "name": "string",
+      "email": "string",
+      "role": "string"
+    },
+  }
+}
+```
+### POST /auth/login
+ User login
+
+**Request Body:**
+```json
+{
+    "email":"email@example.com",
+    "password":"A2b4@678"
+}
+```
+Response:
+```json
+{
+ "statusCode": 200,
+    "success": true,
+    "message": "User Logged In Successfully",
+    "data": {
+        "accessToken": T,
+        "refreshToken": T,
+        "user": {
+            "_id": "68879ca67515bff8b87302dd",
+            "name": "example",
+            "email": "example@gmail.com",
+            "role": "ADMIN",
+            "isDeleted": false,
+            "isActive": "ACTIVE",
+            "isVerified": true,
+            "auths": [
+                {
+                    "provider": "credentials",
+                    "providerId": "super@gmail.com"
+                }
+            ],
+            "createdAt": "2025-07-28T15:52:06.739Z",
+            "updatedAt": "2025-07-28T15:52:06.739Z",
+            "id": "3216ca67515bff8b87302dd"
+        }
+    }
+}
+```
+### POST /auth/refresh-token
+ Refresh token if token expired
+
+**Request Body:**
+```json
+{
+    "email":"email@example.com",
+    "password":"A2b4@678"
+}
+```
+Response:
+```json
+{
+ "statusCode": 200,
+    "success": true,
+    "message": "Token refreshed Successfully",
+    "data": {
+        "accessToken": T,
+        "refreshToken": T,
+    }
+}
+```
+### POST /auth/logout
+ Refresh token if token expired
+
+Response:
+```json
+{
+ "statusCode": 200,
+    "success": true,
+    "message": "Logged out Successfully",
+    "data":null
+}
+```
+### POST /auth/reset-password
+ Reset or change password
+**Request Body:**
+```json
+{
+    "oldPassword":"1223121AS12",
+    "newPassword":"341131SQ@"
+}
+```
+Response:
+```json
+{
+ "statusCode": 200,
+    "success": true,
+    "message": "Logged out Successfully",
+    "data":null
+}
+```
+### POST /parcel/create
+ Create a parcel to deliver
+**Request Body:**
+```json
+    "sender": "6888ffa7d90d56f502191681",
+    "receiver": {
+        "name": "John Doe",
+        "phone": "017********",
+        "address": "Mohaammadpur, BD",
+        "email": "example@gmail.com"
+    },
+    "packageDetails": {
+        "type": "DOCUMENT",
+        "weight": 0.2,
+        "description": "Maritial contracts"
+    },
+    "fee": 12.99,
+    "expectedDeliveryDate": "2026-09-15T00:00:00.000Z"
+}
+```
+Response:
+```json
+{
+    "statusCode": 201,
+    "success": true,
+    "message": "Parcel created succesfully!",
+    "data": {
+        "sender": "6888ffa7d90d56f502191681",
+        "receiver": {
+            "name": "John Doe",
+            "phone": "017********",
+            "address": "Mohaammadpur, BD",
+            "email": "example@gmail.com"
+        },
+        "packageDetails": {
+            "type": "DOCUMENT",
+            "weight": 0.2,
+            "description": "Mariti2al contracts"
+        },
+        "fee": 12.99,
+        "currentStatus": "REQUESTED",
+        "isBlocked": false,
+        "expectedDeliveryDate": "2026-09-15T00:00:00.000Z",
+        "_id": "688a64dda4496d1fbbaa4a6f",
+        "statusLog": [
+            {
+                "status": "REQUESTED",
+                "updatedBy": "6888ffa7d90d56f502191681",
+                "note": "Parcel created",
+                "createdAt": "2025-07-30T18:30:53.113Z",
+                "_id": "688a64dda4496d1fbbaa4a71"
+            }
+        ],
+        "createdAt": "2025-07-30T18:30:53.057Z",
+        "updatedAt": "2025-07-30T18:30:53.057Z",
+        "trackingId": "TRK-20250730-CNFB6U",
+        "__v": 0
+    }
+}
+```
+### GET /parcel
+ Get all parcel for admins and others, based on user role dirrefent data will be returned
+Query Params:
+* filter - Filter by any parcel field (packageDetails.type=FRAGILE)
+* sort - Sorting (-createdAt for newest first)
+* page - Pagination page
+* limit - Items per page
+* searchTerm - name, email, address, role
+Response:
+```json
+{
+    "statusCode": 201,
+    "success": true,
+    "message": "Parcel created succesfully!",
+    "data": [{}]
+}
+```
+### PATCH /parcel/:trkId
+ Update parcel details by admins and others, based on user role dirrefent data will be affect
+**Request Body:**
+```json
+ {
+   "packageDetails":{
+        "type":"FRAGILE"
+    },
+   "fee":20
+}
+```
+Response:
+```json
+{
+    "statusCode": 201,
+    "success": true,
+    "message": "Parcel created succesfully!",
+    "data": [{}]
+}
+```
 ## Configuration Options
 
 The application's behavior can be configured through environment variables. Here's a summary of key configuration options:
