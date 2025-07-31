@@ -15,10 +15,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Parcel = void 0;
 const mongoose_1 = require("mongoose");
 const parcel_interface_1 = require("./parcel.interface");
-const generateTrackingId_1 = require("../../utils/generateTrackingId");
 const AppError_1 = require("../../errorHelpers/AppError");
 const http_status_codes_1 = __importDefault(require("http-status-codes"));
 const user_model_1 = require("../user/user.model");
+const generateTrackingId_1 = require("../../utils/generateTrackingId");
 const statusLogSchema = new mongoose_1.Schema({
     status: {
         type: String,
