@@ -98,7 +98,7 @@ Follow these steps to set up the project:
 
 ## Usage Examples & API Documentation
 
-​### POST /user/register
+### POST /user/register
 Register a new user
 
 **Request Body:**
