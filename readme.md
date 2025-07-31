@@ -49,16 +49,32 @@ Follow these steps to set up the project:
 
 3.  **Configure Environment Variables:**
 
-    Create a `.env` file (if one doesn't exist) or modify existing environment variables. The following environment variables are likely used (although specific variable names are not visible in the provided file snippets, adapt this section based on your actual implementation):
+        Create a `.env` file (if one doesn't exist) or modify existing environment variables. The following environment variables are likely used (although specific variable names are not visible in the provided file snippets, adapt this section based on your actual implementation):
+
+        ```
+        PORT=3000 # or any available port
+        DB_URL=mongodb://localhost:27017/parcel-delivery # Your MongoDB connection string
+        NODE_ENV=YourSecreet # Change this for security!
+        SESSION_SECRET=YourSecreet # Change this for security!
+        BCRYPT_SALT_ROUND=YourSecreet # Change this for security!
+        JWT_ACCESS_SECRET=YourSecreet # Change this for security!
+        JWT_ACCESS_EXPIRES=YourSecreet # Change this for security!
+        JWT_REFRESH_SECRET=YourSecreet # Change this for security!
+        JWT_REFRESH_EXPIRES=YourSecreet # Change this for security!
+        SUPER_ADMIN_EMAIL=YourSecreet # Change this for security!
+        SUPER_ADMIN_PASSWORD=YourSecreet # Change this for security!
+        GOOGLE_CLIENT_SECRET=YourSecreet # Change this for security!
+        GOOGLE_CLIENT_ID=YourSecreet # Change this for security!
+        GOOGLE_CALLBACK_URL=YourSecreet # Change this for security!
+        EXPRESS_SESSION_SECRET=YourSecreet # Change this for security!
+        FRONTEND_URL=YourSecreet # Change this for security!
+        # Add any other necessary environment variables here
 
     ```
-    PORT=3000 # or any available port
-    DB_URL=mongodb://localhost:27017/parcel-delivery # Your MongoDB connection string
-    SESSION_SECRET=YourSecreetKey # Change this for security!
-    # Add any other necessary environment variables here
-    ```
 
-    **Important:** Replace `YourSecreetKey` with a strong, randomly generated secret key for session management.
+        **Important:** Replace `YourSecreetKey` with a strong, randomly generated secret key for session management.
+
+    ```
 
 4.  **Database Setup:**
 
