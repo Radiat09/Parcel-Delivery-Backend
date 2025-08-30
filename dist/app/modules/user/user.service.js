@@ -24,14 +24,14 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UserServices = void 0;
+const bcryptjs_1 = __importDefault(require("bcryptjs"));
+const http_status_codes_1 = __importDefault(require("http-status-codes"));
 const env_1 = require("../../config/env");
 const AppError_1 = require("../../errorHelpers/AppError");
-const user_interface_1 = require("./user.interface");
-const user_model_1 = require("./user.model");
-const http_status_codes_1 = __importDefault(require("http-status-codes"));
-const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const QueryBuilder_1 = require("../../utils/QueryBuilder");
 const user_constants_1 = require("./user.constants");
+const user_interface_1 = require("./user.interface");
+const user_model_1 = require("./user.model");
 const createUserService = (payload) => __awaiter(void 0, void 0, void 0, function* () {
     const { email, password } = payload, rest = __rest(payload, ["email", "password"]);
     const isUserExist = yield user_model_1.User.findOne({ email });
@@ -92,8 +92,15 @@ const updateUser = (userId, payload, decodedToken) => __awaiter(void 0, void 0, 
     });
     return newUpdatedUser;
 });
+const getMe = (userId) => __awaiter(void 0, void 0, void 0, function* () {
+    const user = yield user_model_1.User.findById(userId).select("-password");
+    return {
+        data: user,
+    };
+});
 exports.UserServices = {
     createUserService,
     getAllUsers,
     updateUser,
+    getMe,
 };
