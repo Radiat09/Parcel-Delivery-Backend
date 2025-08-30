@@ -13,15 +13,15 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.checkAuth = void 0;
+const http_status_codes_1 = __importDefault(require("http-status-codes"));
 const env_1 = require("../config/env");
 const AppError_1 = require("../errorHelpers/AppError");
-const jwt_1 = require("../utils/jwt");
-const http_status_codes_1 = __importDefault(require("http-status-codes"));
 const user_interface_1 = require("../modules/user/user.interface");
 const user_model_1 = require("../modules/user/user.model");
+const jwt_1 = require("../utils/jwt");
 const checkAuth = (...authRoles) => (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const accessToken = req.headers.authorization;
+        const accessToken = req.cookies.accessToken || req.headers.authorization;
         if (!accessToken) {
             throw new AppError_1.AppError(403, "No Token Recieved");
         }
