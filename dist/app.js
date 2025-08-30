@@ -15,7 +15,7 @@ const notFound_1 = __importDefault(require("./app/middlewares/notFound"));
 const routes_1 = require("./app/routes");
 const app = (0, express_1.default)();
 app.use((0, express_session_1.default)({
-    secret: "Your secreet",
+    secret: env_1.envVars.EXPRESS_SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
 }));

@@ -13,7 +13,7 @@ const app = express();
 
 app.use(
   expressSession({
-    secret: "Your secreet",
+    secret: envVars.EXPRESS_SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
   })
