@@ -45,6 +45,7 @@ const getAllUsers = async (query: Record<string, string>) => {
     .filter()
     .sort()
     .fields()
+    .selectField("-password")
     .paginate();
 
   const [data, meta] = await Promise.all([
