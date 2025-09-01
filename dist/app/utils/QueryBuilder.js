@@ -56,6 +56,10 @@ class QueryBuilder {
     build() {
         return this.modelQuery;
     }
+    selectField(field) {
+        this.modelQuery = this.modelQuery.select(field);
+        return this;
+    }
     getMeta() {
         return __awaiter(this, void 0, void 0, function* () {
             const totalDocuments = yield this.modelQuery.model.countDocuments();

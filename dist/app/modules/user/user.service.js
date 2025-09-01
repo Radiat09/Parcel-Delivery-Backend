@@ -53,6 +53,7 @@ const getAllUsers = (query) => __awaiter(void 0, void 0, void 0, function* () {
         .filter()
         .sort()
         .fields()
+        .selectField("-password")
         .paginate();
     const [data, meta] = yield Promise.all([
         users.build(),

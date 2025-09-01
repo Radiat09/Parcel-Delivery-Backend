@@ -62,6 +62,11 @@ export class QueryBuilder<T> {
     return this.modelQuery;
   }
 
+  selectField(field: string) {
+    this.modelQuery = this.modelQuery.select(field);
+    return this;
+  }
+
   async getMeta() {
     const totalDocuments = await this.modelQuery.model.countDocuments();
 
