@@ -13,6 +13,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ParcelServices = void 0;
+const http_status_codes_1 = __importDefault(require("http-status-codes"));
 const AppError_1 = require("../../errorHelpers/AppError");
 const QueryBuilder_1 = require("../../utils/QueryBuilder");
 const user_interface_1 = require("../user/user.interface");
@@ -20,7 +21,6 @@ const user_model_1 = require("../user/user.model");
 const parcel_constant_1 = require("./parcel.constant");
 const parcel_interface_1 = require("./parcel.interface");
 const parcel_model_1 = require("./parcel.model");
-const http_status_codes_1 = __importDefault(require("http-status-codes"));
 const createParcelService = (payload) => __awaiter(void 0, void 0, void 0, function* () {
     const { sender } = payload;
     const isUserExist = yield user_model_1.User.findById(sender);
@@ -44,7 +44,7 @@ const getAllParcelService = (query, user) => __awaiter(void 0, void 0, void 0, f
             .fields()
             .paginate();
         const [data, meta] = yield Promise.all([
-            users.build(),
+            users.build().populate("sender", "name email phone"),
             queryBuilder.getMeta(),
         ]);
         return {

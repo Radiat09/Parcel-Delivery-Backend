@@ -1,4 +1,6 @@
 import { Request } from "express";
+import httpStatus from "http-status-codes";
+import { JwtPayload } from "jsonwebtoken";
 import { AppError } from "../../errorHelpers/AppError";
 import { QueryBuilder } from "../../utils/QueryBuilder";
 import { IUser, Role } from "../user/user.interface";
@@ -6,8 +8,6 @@ import { User } from "../user/user.model";
 import { parcelSearchableFields } from "./parcel.constant";
 import { EStatus, IMongoUpdate, IParcel, IStatusLog } from "./parcel.interface";
 import { Parcel } from "./parcel.model";
-import httpStatus from "http-status-codes";
-import { JwtPayload } from "jsonwebtoken";
 
 const createParcelService = async (payload: Partial<IParcel>) => {
   const { sender } = payload;
@@ -51,7 +51,7 @@ const getAllParcelService = async (
       .paginate();
 
     const [data, meta] = await Promise.all([
-      users.build(),
+      users.build().populate("sender", "name email phone"),
       queryBuilder.getMeta(),
     ]);
     return {
