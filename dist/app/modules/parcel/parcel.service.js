@@ -47,7 +47,7 @@ const getAllParcelService = (query, user) => __awaiter(void 0, void 0, void 0, f
             users
                 .build()
                 .populate("sender", "name email phone")
-                .select("-sender.id -sender._id"),
+                .select("-sender.id -sender._id -_id"),
             queryBuilder.getMeta(),
         ]);
         return {
