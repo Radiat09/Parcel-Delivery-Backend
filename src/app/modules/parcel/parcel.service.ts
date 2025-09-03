@@ -51,7 +51,10 @@ const getAllParcelService = async (
       .paginate();
 
     const [data, meta] = await Promise.all([
-      users.build().populate("sender", "name email phone"),
+      users
+        .build()
+        .populate("sender", "name email phone")
+        .select("-sender.id -sender._id"),
       queryBuilder.getMeta(),
     ]);
     return {
