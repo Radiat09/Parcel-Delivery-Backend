@@ -56,7 +56,6 @@ const getAllParcelService = async (
         .build()
         .populate("sender", "name email phone")
         .select("-sender.id -sender._id"),
-
       queryBuilder.getMeta(),
     ]);
     return {
