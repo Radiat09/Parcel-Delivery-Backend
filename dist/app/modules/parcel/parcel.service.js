@@ -47,7 +47,7 @@ const getAllParcelService = (query, user) => __awaiter(void 0, void 0, void 0, f
         const [data, meta] = yield Promise.all([
             users
                 .build()
-                .populate("sender", "name email phone")
+                .populate("sender", "name email phone -_id -id")
                 .select("-sender.id -sender._id"),
             queryBuilder.getMeta(),
         ]);
