@@ -48,13 +48,15 @@ const getAllParcelService = async (
       .filter()
       .sort()
       .fields()
+      .selectField("-_id")
       .paginate();
 
     const [data, meta] = await Promise.all([
       users
         .build()
         .populate("sender", "name email phone")
-        .select("-sender.id -sender._id -_id"),
+        .select("-sender.id -sender._id"),
+
       queryBuilder.getMeta(),
     ]);
     return {
