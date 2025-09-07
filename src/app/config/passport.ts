@@ -59,7 +59,10 @@ passport.use(
     {
       clientID: envVars.GOOGLE_CLIENT_ID,
       clientSecret: envVars.GOOGLE_CLIENT_SECRET,
-      callbackURL: envVars.GOOGLE_CALLBACK_URL,
+      callbackURL:
+        envVars.NODE_ENV === "production"
+          ? envVars.GOOGLE_CALLBACK_URL_LIVE
+          : envVars.GOOGLE_CALLBACK_URL_LOCAL,
     },
     async (
       accessToken: string,
