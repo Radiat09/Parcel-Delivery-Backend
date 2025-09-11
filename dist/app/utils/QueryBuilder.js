@@ -16,8 +16,9 @@ class QueryBuilder {
         this.modelQuery = modelQuery;
         this.query = query;
     }
-    filter() {
-        const filter = Object.assign({}, this.query);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    filter(additionalFilter = {}) {
+        const filter = Object.assign(Object.assign({}, this.query), additionalFilter);
         for (const field of constants_1.excludeField) {
             // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
             delete filter[field];

@@ -35,42 +35,46 @@ const createParcelService = (payload) => __awaiter(void 0, void 0, void 0, funct
     return parcel;
 });
 const getAllParcelService = (query, user) => __awaiter(void 0, void 0, void 0, function* () {
+    const queryBuilder = new QueryBuilder_1.QueryBuilder(parcel_model_1.Parcel.find(), query);
+    // Handle user validation and filter building
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    let filterCriteria = {};
     if (user.role === user_interface_1.Role.ADMIN || user.role === user_interface_1.Role.SUPER_ADMIN) {
-        const queryBuilder = new QueryBuilder_1.QueryBuilder(parcel_model_1.Parcel.find(), query);
-        const users = queryBuilder
-            .search(parcel_constant_1.parcelSearchableFields)
-            .filter()
-            .sort()
-            .fields()
-            .selectField("-_id")
-            .paginate();
-        const [data, meta] = yield Promise.all([
-            users
-                .build()
-                .populate("sender", "name email phone -_id")
-                .select("-sender.id -sender._id"),
-            queryBuilder.getMeta(),
-        ]);
-        return {
-            data,
-            meta,
-        };
+        // No additional filter for admin users
+        filterCriteria = {};
     }
     else {
         const userExist = yield user_model_1.User.findOne({ email: user.email });
-        let data;
         if (!userExist) {
             throw new AppError_1.AppError(http_status_codes_1.default.NOT_FOUND, "Invalid User request!");
         }
         if (user.role === user_interface_1.Role.SENDER) {
-            // Now `userExist` is a single document (or null)
-            data = yield parcel_model_1.Parcel.find({ sender: userExist._id });
+            filterCriteria = { sender: userExist._id };
         }
         else {
-            data = yield parcel_model_1.Parcel.find({ "receiver.email": userExist.email });
+            filterCriteria = { "receiver.email": userExist.email };
         }
-        return { data, meta: { total: data === null || data === void 0 ? void 0 : data.length } }; // Maintain consistent return type
     }
+    // Build the query with common operations
+    const usersQuery = queryBuilder
+        .search(parcel_constant_1.parcelSearchableFields)
+        .filter(filterCriteria)
+        .sort()
+        .fields()
+        .selectField("-_id")
+        .paginate();
+    // Execute query and get meta data
+    const [data, meta] = yield Promise.all([
+        usersQuery
+            .build()
+            .populate("sender", "name email phone -_id")
+            .select("-sender.id -sender._id"),
+        queryBuilder.getMeta(),
+    ]);
+    return {
+        data,
+        meta,
+    };
 });
 const updateParcelService = (req) => __awaiter(void 0, void 0, void 0, function* () {
     const user = req.user;
