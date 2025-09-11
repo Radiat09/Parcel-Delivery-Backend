@@ -10,8 +10,9 @@ export class QueryBuilder<T> {
     this.query = query;
   }
 
-  filter(): this {
-    const filter = { ...this.query };
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  filter(additionalFilter: Record<string, any> = {}): this {
+    const filter = { ...this.query, ...additionalFilter };
 
     for (const field of excludeField) {
       // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
@@ -19,7 +20,6 @@ export class QueryBuilder<T> {
     }
 
     this.modelQuery = this.modelQuery.find(filter);
-
     return this;
   }
 
