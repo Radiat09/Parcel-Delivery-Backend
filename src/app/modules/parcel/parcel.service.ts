@@ -40,45 +40,51 @@ const getAllParcelService = async (
   query: Record<string, string>,
   user: Partial<IUser>
 ) => {
+  const queryBuilder = new QueryBuilder(Parcel.find(), query);
+
+  // Handle user validation and filter building
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  let filterCriteria: Record<string, any> = {};
+
   if (user.role === Role.ADMIN || user.role === Role.SUPER_ADMIN) {
-    const queryBuilder = new QueryBuilder(Parcel.find(), query);
-
-    const users = queryBuilder
-      .search(parcelSearchableFields)
-      .filter()
-      .sort()
-      .fields()
-      .selectField("-_id")
-      .paginate();
-
-    const [data, meta] = await Promise.all([
-      users
-        .build()
-        .populate("sender", "name email phone -_id")
-        .select("-sender.id -sender._id"),
-
-      queryBuilder.getMeta(),
-    ]);
-    return {
-      data,
-      meta,
-    };
+    // No additional filter for admin users
+    filterCriteria = {};
   } else {
     const userExist = await User.findOne({ email: user.email });
-    let data;
 
     if (!userExist) {
       throw new AppError(httpStatus.NOT_FOUND, "Invalid User request!");
     }
-    if (user.role === Role.SENDER) {
-      // Now `userExist` is a single document (or null)
-      data = await Parcel.find({ sender: userExist._id });
-    } else {
-      data = await Parcel.find({ "receiver.email": userExist.email });
-    }
 
-    return { data, meta: { total: data?.length } }; // Maintain consistent return type
+    if (user.role === Role.SENDER) {
+      filterCriteria = { sender: userExist._id };
+    } else {
+      filterCriteria = { "receiver.email": userExist.email };
+    }
   }
+
+  // Build the query with common operations
+  const usersQuery = queryBuilder
+    .search(parcelSearchableFields)
+    .filter(filterCriteria)
+    .sort()
+    .fields()
+    .selectField("-_id")
+    .paginate();
+
+  // Execute query and get meta data
+  const [data, meta] = await Promise.all([
+    usersQuery
+      .build()
+      .populate("sender", "name email phone -_id")
+      .select("-sender.id -sender._id"),
+    queryBuilder.getMeta(),
+  ]);
+
+  return {
+    data,
+    meta,
+  };
 };
 
 const updateParcelService = async (req: Request) => {
