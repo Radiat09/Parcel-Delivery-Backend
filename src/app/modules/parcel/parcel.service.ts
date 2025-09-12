@@ -220,6 +220,44 @@ const updateParcelService = async (req: Request) => {
       }
       break;
     }
+    case Role.RECIVER: {
+      if (!updateData.currentStatus) {
+        throw new Error(
+          `You do not have the authority to update ${Object.keys(updateData)}`
+        );
+      }
+
+      // Receiver can only update status to DELIVERED
+      if (updateData.currentStatus !== EStatus.DELIVERED) {
+        throw new Error(
+          `Receivers can only confirm delivery. Invalid status: ${updateData.currentStatus}`
+        );
+      }
+
+      // Additional validation - ensure the package is in a valid state for receiver confirmation
+      if (parcel.currentStatus !== EStatus.IN_TRANSIT) {
+        throw new Error(
+          `Cannot confirm delivery. Package must be in transit or out for delivery. Current status: ${parcel.currentStatus}`
+        );
+      }
+
+      if (updateData.currentStatus === EStatus.DELIVERED) {
+        update.$set = {
+          currentStatus: EStatus.DELIVERED,
+          actualDeliveryDate: new Date(),
+          receiverConfirmationDate: new Date(), // Optional: track when receiver confirmed
+        };
+        update.$push = {
+          statusLog: {
+            status: EStatus.DELIVERED,
+            updatedBy: user?.userId,
+            createdAt: new Date(),
+            note: "Delivery confirmed by recipient",
+          },
+        };
+      }
+      break;
+    }
 
     default:
       throw new Error("Unauthorized role");
